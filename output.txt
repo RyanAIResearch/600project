@@ -1,0 +1,70 @@
+Crawling directory: input_pages
+Building index structures...
+Indexed 6 pages with 14971 unique terms
+
+Search engine initialized. Enter queries (or 'exit' to quit):
+
+Search: Processing query: ''
+No results found.
+
+Search: Processing query: 'SUPERman'
+Found 6 results:
+1. Superman - Wikipedia
+   'superman' appears 631 times
+
+2. Artificial intelligence - Wikipedia
+   'superman' appears 1 times
+
+3. CBA - Wikipedia
+   'superman' appears 1 times
+
+4. Medicine - Wikipedia
+   'superman' appears 1 times
+
+5. National Basketball Association - Wikipedia
+   'superman' appears 1 times
+
+6. Wikipedia, the free encyclopedia
+   'superman' appears 1 times
+
+
+Search: Processing query: 'superma'
+No results found.
+
+Search: Processing query: 'attack'
+Found 1 results:
+1. Superman - Wikipedia
+   'attack' appears 1 times
+
+
+Search: Processing query: 'NBAAA'
+No results found.
+
+Search: Processing query: 'NBA'
+Found 6 results:
+1. National Basketball Association - Wikipedia
+   'nba' appears 368 times
+
+2. CBA - Wikipedia
+   'nba' appears 2 times
+
+3. Artificial intelligence - Wikipedia
+   'nba' appears 1 times
+
+4. Medicine - Wikipedia
+   'nba' appears 1 times
+
+5. Superman - Wikipedia
+   'nba' appears 1 times
+
+6. Wikipedia, the free encyclopedia
+   'nba' appears 1 times
+
+
+Search: Processing query: 'an'
+No results found.
+
+Search: Processing query: 'the'
+No results found.
+
+Search: 
