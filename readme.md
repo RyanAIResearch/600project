@@ -2,66 +2,64 @@
 
 ## Overview
 
-This project implements a simplified search engine as described in Section 23.6 of the textbook. The search engine processes a collection of web pages, builds an inverted index, and allows users to search for pages containing specific keywords.
+This project implements the simplified search engine described in Section 23.6 of the textbook. It processes a small site’s HTML pages, builds an inverted index backed by a compressed trie, and lets users issue single‑ or multi‑keyword queries to retrieve and rank matching pages.
 
-## Approach
+## Data Structures Used
 
-### Data Structures Used
+1. **Inverted Index**
 
-1. **Inverted Index** : The core data structure is an inverted index that maps words to their occurrence lists (documents containing the word).
+   - A `dict[str, list[str]]` mapping each index term to the list of document URLs that contain it.
+2. **Compressed Trie**
 
-* Implemented as a dictionary where keys are words and values are lists of document references
-* Each entry in the dictionary represents a key-value pair (w, L) where:
-  * w is a word (index term)
-  * L is a collection of references to pages containing w
+   - A character‐by‐character trie whose external (terminal) nodes store an integer pointer into the occurrence‑list array.
+   - Enables O(m) lookup of any m‑character keyword.
+3. **Occurrence Lists**
 
-1. **Compressed Trie** : Used for efficient storage and lookup of index terms
+   - An array of posting lists (`List[List[str]]`), one per unique term.
+   - Each list is sorted by URL to support fast intersection.
 
-* External nodes store indices to the occurrence lists
-* Helps keep the core data structure small enough to fit in memory
+## Algorithms Implemented
 
-1. **Occurrence Lists** : Stored in an array outside the trie
+1. **Web Crawler**
 
-* Each list is sorted by document identifier to facilitate intersection operations
+   - Reads all `.html` files from a directory.
+   - Uses BeautifulSoup to extract `<title>`, text content, and hyperlinks.
+2. **Indexing Process**
 
-### Algorithms Implemented
+   - Tokenizes page text to lowercase words, strips punctuation, filters out stop words and very short tokens.
+   - Records term frequencies per page and appends each page’s URL to that term’s posting list.
+3. **Build Phase**
 
-1. **Web Crawler** :
+   - Sorts all unique terms, moves each posting list into the occurrence‑lists array, and inserts the term into the trie with its list index.
+4. **Query Processing**
 
-* Parses HTML documents
-* Extracts text content and links
-* Follows links to other documents in the collection
+   - Tokenizes a user query identically to page text.
+   - For each term, looks up its posting‑list index via the trie in O(m).
+   - If multiple terms, computes the intersection of their sorted posting lists.
+5. **Ranking Algorithm**
 
-1. **Indexing Process** :
-
-* Tokenizes text into words
-* Removes stop words (articles, prepositions, pronouns)
-* Builds the inverted index and trie structure
-
-1. **Query Processing** :
-
-* For single keyword queries: retrieves the occurrence list directly
-* For multiple keywords: computes the intersection of occurrence lists
-* Sorts results by relevance ranking
-
-1. **Ranking Algorithm** :
-
-* Basic ranking based on term frequency (how many times query terms appear in document)
-* Documents with higher frequency of query terms are ranked higher
+   - Scores each result by summing term frequencies in the page.
+   - Awards a small bonus if the term appears in the page’s `<title>`.
+   - Returns results sorted by descending score.
 
 ## Complexity Analysis
 
-* Time complexity for query processing: O(|Σ|m) where:
-  * |Σ| is the size of the alphabet
-  * m is the length of the pattern/query
-* Space complexity: O(n) where n is the total text size
+- **Query Time**
+
+  - Trie lookup for one m‑character term: O(m)
+  - Intersection of k posting lists of lengths L₁,…,Lₖ: O(∑₁ᵏ |Lᵢ|)
+  - **Total**: O(m + ∑|Lᵢ|)
+- **Space**
+
+  - Scanning and tokenizing all pages (total text length n): O(n)
+  - Storing all posting‑list entries and trie nodes: O(n)
 
 ## Boundary Conditions Tested
 
-1. Empty queries
-2. Queries with only stop words
-3. Queries with no matching documents
-4. Case sensitivity handling
-5. Partial word matches
-6. Very large documents
-7. Documents with no indexable content
+- Empty queries
+- Queries consisting only of stop words
+- Queries with no matching documents
+- Case‑insensitive matching (e.g. “Apple” vs. “apple”)
+- Partial‑word edge cases (ensuring exact‑term lookup)
+- Very large documents (multi‑MB HTML)
+- Documents containing no indexable content
